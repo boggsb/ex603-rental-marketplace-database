@@ -6,6 +6,7 @@ The table below documents each foreign key relationship, the `ON DELETE` behavio
 
 | Foreign Key | ON DELETE Choice | Reason |
 |---|---|---|
+| `renter.referring_renter_id → renter.renter_id` | `SET NULL` | If the renter is deleted, the `referring_renter_id` should be set to `NULL`. |
 | `viewing.property_id → property.property_id` | `CASCADE` | If the property is deleted, all associated viewings should be removed as well. |
 | `renter_viewing.renter_id → renter.renter_id` | `CASCADE` | If the renter is deleted, all associated renter-viewings should be removed as well. |
 | `renter_viewing.viewing_id → viewing.viewing_id` | `CASCADE` | If the viewing is deleted, all associated renter-viewings should be removed as well. |
@@ -13,6 +14,21 @@ The table below documents each foreign key relationship, the `ON DELETE` behavio
 
 ### Foreign Key Delete Behavior
 
+#### `renter.referring_renter_id → renter.renter_id`
+
+**ON DELETE choice:** `SET NULL`
+
+This constraint governs what happens when a `renter` is removed from the platform.
+
+The real-world event represented by this deletion is `a renter leaves the platform`.
+
+When a `renter` is deleted, `any renters that had the deleted renter as a referrer will have their referring_renter_id set to NULL`. The selected `ON DELETE` behavior causes `an null entry in the referring_renter_id column`.
+
+This behavior was chosen because `when one renter leaves the platform, we want to keep the records of other active renters that may have been referred by them`.
+
+Under an alternative such as `CASCADE`, `renters not leaving the platform would be deleted which is undesirable`.
+
+---
 #### `viewing.property_id → property.property_id`
 
 **ON DELETE choice:** `CASCADE`
@@ -88,7 +104,7 @@ The following `CHECK` constraints prevent invalid domain states from being store
 **Constraint:**
 
 ```sql
-CHECK (listing_price >= 0)
+CHECK (listing_price > 0)
 ```
 
 This constraint prevents the database from storing a record where `the listing price is negative`.
@@ -104,7 +120,7 @@ The invalid state could otherwise occur because numeric can store negative value
 **Constraint:**
 
 ```sql
-CHECK (duration_min >= 0)
+CHECK (duration_min > 0)
 ```
 
 This constraint prevents `negative duration of a viewing`.

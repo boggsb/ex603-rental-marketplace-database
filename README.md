@@ -38,3 +38,5 @@ The schema is defined in `schema/schema.sql`.
 
 1. the amenities was originally implemented with a join table on property such that the amenities were an entity type on their own. this has been collapsed into a single `amenity` table with a multi-value pattern from property. 
 2. the `viewing` table was was originally implemented as the join table between `property` and `renter`. viewing was changed to be a standalone entity. we use a join table on between the viewing and renter to support multiple renters at a viewing. the property is now one to many with a viewing.
+3. the `renter` table adds a self referencing column to support referrals between renters.
+4. `viewing.ending_at` is a derived attribute based on `viewing.starting_at` and `viewing.duration_min`.

@@ -2,13 +2,14 @@
 Table renter {
   renter_id integer [pk]
   display_name varchar [unique, not null]
+  referring_renter_id int [ref: >? renter.renter_id]
 }
 
 Table property {
   property_id integer [pk]
-  display_name varchar [unique, not null]
+  display_name varchar [not null]
   active_listing bool [not null]
-  listing_price numeric [not null]
+  monthly_rent numeric [not null]
 }
 
 Table viewing {
