@@ -1,3 +1,4 @@
+
 Table renter {
   renter_id integer [pk]
   display_name varchar [unique, not null]
@@ -7,27 +8,31 @@ Table property {
   property_id integer [pk]
   display_name varchar [unique, not null]
   active_listing bool [not null]
-  listing_price int [not null]
+  listing_price numeric [not null]
 }
 
 Table viewing {
   viewing_id integer [pk]
-  property_id integer [not null, ref: > property.property_id, delete: "cascade"]
-  renter_id integer [not null, ref: > renter.renter_id, delete: "cascade"]
+  property_id integer [not null, ref: ?> property.property_id, delete: "cascade"]
   duration_min integer [not null]
-  viewing_date timestamp [not null]
+  viewing_at timestamp [not null]
 }
 
 Table amenity {
-  amenity_id integer [pk]
-  name  varchar [unique, not null]
-}
-
-Table property_amenity {
-  property_id integer [not null, ref: > property.property_id, delete: "cascade"]
-  amenity_id integer [not null, ref: > amenity.amenity_id, delete: "cascade"]
+  property_id integer [not null]
+  name  varchar [not null]
 
   indexes {
-    (property_id, amenity_id) [pk]
+    (property_id, name) [pk]
+  }
+}
+Ref: property.property_id <? amenity.property_id [delete:cascade]
+
+Table renter_viewing {
+  renter_id integer [not null, ref: ?> renter.renter_id, delete: "cascade"]
+  viewing_id integer [not null, ref: ?> viewing.viewing_id, delete: "cascade"]
+
+  indexes {
+    (renter_id, viewing_id) [pk]
   }
 }
