@@ -40,3 +40,22 @@ The schema is defined in `schema/schema.sql`.
 2. the `viewing` table was was originally implemented as the join table between `property` and `renter`. viewing was changed to be a standalone entity. we use a join table on between the viewing and renter to support multiple renters at a viewing. the property is now one to many with a viewing.
 3. the `renter` table adds a self referencing column to support referrals between renters.
 4. `viewing.ending_at` is a derived attribute based on `viewing.starting_at` and `viewing.duration_min`.
+
+## Unit 4: Viewing performance
+
+Unit 4 uses the provided dataset in [queries/unit3/rental.sql](queries/unit3/rental.sql),
+A producer is a property, an actor is a renter, the metric is
+`duration_min`, and a failure is a recorded `Renter no show`. Region means
+the property's `city`.
+
+### Query catalogue
+
+| File / query | Business question |
+|---|---|
+| [q4_1.sql](queries/unit4/q4_1.sql) — 4.1A | How much viewing activity occurred, what are the duration statistics, how many renters participated, and what is the platform failure rate? |
+| q4_1.sql — 4.1B | Which properties have the most events, and how do average duration and failure rate vary? |
+| q4_1.sql — 4.1C | Which properties have at least 15 viewings for an initial volume comparison? |
+| q4_1.sql — 4.1D | How do volume, duration, and failure rate vary by property region and viewing status together? |
+| [q4_2.sql](queries/unit4/q4_2.sql) — 4.2A | How many viewings and renter no-shows does each property have, counted together? |
+| q4_2.sql — 4.2B | What are the regional subtotals and platform grand total, without detail rows? |
+| q4_2.sql — 4.2C | What is the weighted failure baseline among properties with at least 15 viewings? |
